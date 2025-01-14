@@ -15,6 +15,17 @@ class LigaPartido(models.Model):
     #PARA CUANDO NO HAY UN ATRIBUTO LLAMADO NAME PARA MOSTRAR LOS Many2One en Vistas
     # https://www.odoo.com/es_ES/forum/ayuda-1/how-defined-display-name-in-custom-many2one-91657
     
+    @api.model
+    def sumar_gols_casa(self):
+        for record in self.search([]):
+            record.goles_casa += 2
+        self.actualizoRegistrosEquipo()
+
+    @api.model
+    def sumar_gols_fuera(self):
+        for record in self.search([]):
+            record.goles_fuera += 2
+        self.actualizoRegistrosEquipo()
    
 
     #Nombre del equipo que juega en casa casa
@@ -60,46 +71,40 @@ class LigaPartido(models.Model):
     Funcion para actualizar la clasificacion de los equipos, re-calculandola entera
     '''
     def actualizoRegistrosEquipo(self):
-        #Recorremos partidos y equipos
         for recordEquipo in self.env['liga.equipo'].search([]):
-            #Como recalculamos todo, ponemos de cada equipo todo a cero
-            recordEquipo.victorias=0
-            recordEquipo.empates=0
-            recordEquipo.derrotas=0
-            recordEquipo.goles_a_favor=0
-            recordEquipo.goles_en_contra=0
-            
-            for recordPartido in self.env['liga.partido'].search([]):  
-        
-                #Si es el equipo de casa
-                if recordPartido.equipo_casa.nombre==recordEquipo.nombre:
-                    
-                    #Miramos si es victoria o derrota
-                    if recordPartido.goles_casa>recordPartido.goles_fuera:
-                        recordEquipo.victorias=recordEquipo.victorias+1
-                    elif recordPartido.goles_casa<recordPartido.goles_fuera:
-                        recordEquipo.derrotas=recordEquipo.derrotas+1
-                    else:
-                        recordEquipo.empates=recordEquipo.empates+1
-                        
-                    #Sumamos goles a favor y en contra
-                    recordEquipo.goles_a_favor=recordEquipo.goles_a_favor+recordPartido.goles_casa
-                    recordEquipo.goles_en_contra=recordEquipo.goles_en_contra+recordPartido.goles_fuera
+            recordEquipo.victorias = 0
+            recordEquipo.empates = 0
+            recordEquipo.derrotas = 0
+            recordEquipo.goles_a_favor = 0
+            recordEquipo.goles_en_contra = 0
+            recordEquipo.puntos = 0
 
-                #Si es el equipo de fuera
-                if recordPartido.equipo_fuera.nombre==recordEquipo.nombre:
-                    
-                    #Miramos si es victoria o derrota
-                    if recordPartido.goles_casa<recordPartido.goles_fuera:
-                        recordEquipo.victorias=recordEquipo.victorias+1
-                    elif recordPartido.goles_casa>recordPartido.goles_fuera:
-                        recordEquipo.derrotas=recordEquipo.derrotas+1
+            for recordPartido in self.env['liga.partido'].search([]):
+                if recordPartido.equipo_casa.nombre == recordEquipo.nombre:
+                    if recordPartido.goles_casa > recordPartido.goles_fuera:
+                        recordEquipo.victorias += 1
+                        if (recordPartido.goles_casa - recordPartido.goles_fuera) >= 4:
+                            recordEquipo.puntos += 4
+                        else:
+                            recordEquipo.puntos += 3
+                    elif recordPartido.goles_casa < recordPartido.goles_fuera:
+                        recordEquipo.derrotas += 1
+                        if (recordPartido.goles_fuera - recordPartido.goles_casa) >= 4:
+                            recordEquipo.puntos -= 1
                     else:
-                        recordEquipo.empates=recordEquipo.empates+1
-                    
-                    #Sumamos goles a favor y en contra
-                    recordEquipo.goles_a_favor=recordEquipo.goles_a_favor+recordPartido.goles_fuera
-                    recordEquipo.goles_en_contra=recordEquipo.goles_en_contra+recordPartido.goles_casa
+                        recordEquipo.empates += 1
+                    recordEquipo.goles_a_favor += recordPartido.goles_casa
+                    recordEquipo.goles_en_contra += recordPartido.goles_fuera
+
+                if recordPartido.equipo_fuera.nombre == recordEquipo.nombre:
+                    if recordPartido.goles_casa < recordPartido.goles_fuera:
+                        recordEquipo.victorias += 1
+                    elif recordPartido.goles_casa > recordPartido.goles_fuera:
+                        recordEquipo.derrotas += 1
+                    else:
+                        recordEquipo.empates += 1
+                    recordEquipo.goles_a_favor += recordPartido.goles_fuera
+                    recordEquipo.goles_en_contra += recordPartido.goles_casa
 
 
 

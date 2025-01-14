@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id='liga_partido_wizard_form' model='ir.ui.view'>
+    <field name='name'>Wizard para crear un Partido</field>
+    <field name='model'>liga.partido.wizard</field>
+    <field name='arch' type='xml'>
+        <form string="Introducir datos del partido">
+            <sheet>
+                <group>
+                    <field name='equipo_local'/>
+                    <field name='equipo_visitante'/>
+                </group>
+                <group>
+                    <field name='fecha'/>
+                    <field name='ubicacion'/>
+                </group>
+            </sheet>
+            <footer>
+                <button string='Crear Partido' name='add_liga_partido' class='btn-primary' type='object'/>
+                <button string='Cancelar' class='btn-default' special='cancel'/>
+            </footer>
+        </form>
+    </field>
+</record>
+
+</odoo>

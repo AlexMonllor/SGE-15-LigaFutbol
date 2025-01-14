@@ -35,19 +35,22 @@
 
     <!-- Vista Tree -->
     <record id="liga_partido_view_tree" model="ir.ui.view">
-        <field name="name">Lista de partidos de la liga</field>
-        <field name="model">liga.partido</field>
-        <field name="arch" type="xml">
-            <tree>
-                <!-- Indicamos que atributos usaremos al hacer la vista Tree -->
-                <field name="equipo_casa" />
-                <field name="goles_casa" />
-                <field name="equipo_fuera" />
-                <field name="goles_fuera" />
+    <field name="name">Lista de partidos</field>
+    <field name="model">liga.partido</field>
+    <field name="arch" type="xml">
+        <tree>
+            <field name="equipo_casa"/>
+            <field name="goles_casa"/>
+            <field name="equipo_fuera"/>
+            <field name="goles_fuera"/>
+        </tree>
+        <header>
+            <button name="sumar_gols_casa" type="object" string="Sumar 2 Gols Casa" class="btn-primary"/>
+            <button name="sumar_gols_fuera" type="object" string="Sumar 2 Gols Visitant" class="btn-secondary"/>
+        </header>
+    </field>
+</record>
 
-            </tree>
-        </field>
-    </record>
 
 
     <!-- Vista Kanban -->

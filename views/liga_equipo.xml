@@ -4,10 +4,14 @@
     <record id='liga_equipo_action' model='ir.actions.act_window'>
         <field name="name">Equipos de la liga</field>
         <field name="res_model">liga.equipo</field>
-        <!-- Indicamos que este modelo se puede ver en kanban, tree y form -->
         <field name="view_mode">tree,kanban,form,graph</field>
     </record>
 
+    <record id='liga_equipo_menu' model='ir.actions.act_window'>
+        <field name="name">Equipos de la liga</field>
+        <field name="res_model">liga.equipo</field>
+        <field name="view_mode">tree,kanban,form,graph</field>
+    </record>
 
     <menuitem name="Gestión de liga" id="liga_base_menu" />
     <menuitem name="Equipos" id="liga_equipo_menu" parent="liga_base_menu" action="liga_equipo_action" />
@@ -97,5 +101,14 @@
              </graph>
          </field>
      </record>
+
+    <record id="action_liga_partido_wizard" model="ir.actions.act_window">
+        <field name="name">Crear Partido</field>
+        <field name="res_model">liga.partido.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+        <menuitem name="Crear Partido" id="menu_liga_partido_wizard" parent="liga_base_menu" action="action_liga_partido_wizard"/>
 
 </odoo>
