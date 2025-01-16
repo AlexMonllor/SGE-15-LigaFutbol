@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
@@ -13,22 +12,22 @@
                             Resultat del partit
                         </h2>
                         <p>
-                            Equip local: <span t-field="doc.equipo_casa.nombre" />
+                            Equip local: <span t-field="doc.equipo_local.nombre" />
                         </p>
                         <p>
-                            Gols local: <span t-field="doc.goles_casa" />
+                            Gols local: <span t-field="doc.goles_local" />
                         </p>
                         <p>
-                            Equip visitant: <span t-field="doc.equipo_fuera.nombre" />
+                            Equip visitant: <span t-field="doc.equipo_visitante.nombre" />
                         </p>
                         <p>
-                            Gols visitant: <span t-field="doc.goles_fuera" />
+                            Gols visitant: <span t-field="doc.goles_visitante" />
                         </p>
                         <!-- Resum del resultat -->
                         <p>
                             <strong>
                                 Resultat: 
-                                <t t-esc="f'{doc.equipo_casa.nombre} {doc.goles_casa} - {doc.goles_fuera} {doc.equipo_fuera.nombre}'" />
+                                <t t-esc="f'{doc.equipo_local.nombre} {doc.goles_local} - {doc.goles_visitante} {doc.equipo_visitante.nombre}'" />
                             </strong>
                         </p>
                     </div>
@@ -38,13 +37,38 @@
     </template>
 
     <!-- Configuració de l'informe -->
-    <report 
-        id="report_partido_resultado" 
-        model="liga.partido" 
-        string="Informe del resultat del partit" 
-        name="liga_futbol.report_partido_resultado_view" 
-        file="liga_futbol.report_partido_resultado_view" 
-        report_type="qweb-pdf" 
+    <report
+        id="report_partido_resultado"
+        model="liga.partido"
+        string="Resultado del Partido"
+        report_type="qweb-pdf"
+        name="module_name.report_partido_resultado_view"
+        file="module_name.report_partido_resultado_view"
+        print_report_name="'Resultado del Partido - %s' % (object.name)"
     />
+<record id="liga_partido_view_form" model="ir.ui.view">
+    <field name="name">Formulario de partido de la liga</field>
+    <field name="model">liga.partido</field>
+    <field name="arch" type="xml">
+        <form>
+            <group>
+                <group>
+                    <field name="equipo_local" />
+                    <field name="equipo_visitante" />
+                    <field name="fecha" />
+                    <field name="ubicacion" />
+                </group>
+                <group>
+                    <field name="goles_local" />
+                    <field name="goles_visitante" />
+                </group>
+            </group>
+            <footer>
+                <button string="Generar Reporte" type="object" name="generar_reporte_partido" class="btn-primary"/>
+                <button string="Cancelar" class="btn-default" special="cancel"/>
+            </footer>
+        </form>
+    </field>
+</record>
 
 </odoo>

@@ -36,7 +36,9 @@
         #Añadimos un Wizard para introducir equipos
         'wizard/liga_equipo_wizard.xml',
         #Añadimos el nuevo Wizard para crear partidos
-        'wizard/liga_partido_wizard.xml'
+        'wizard/liga_partido_wizard.xml',
+        'report/liga_reporte.xml',
+
         
     ],
     # Fichero con data de demo si se inicializa la base de datos con "demo data" (No incluido en ejemplo)

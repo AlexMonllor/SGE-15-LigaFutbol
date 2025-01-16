@@ -19,13 +19,18 @@
             <form>
                 <group>
                     <group>
-                        <field name="equipo_casa" />
-                        <field name="goles_casa" />
+                        <field name="equipo_local" />
+                        <field name="goles_local" />
                     </group>
 
                     <group>
-                        <field name="equipo_fuera" />
-                        <field name="goles_fuera" />
+                        <field name="equipo_visitante" />
+                        <field name="goles_visitante" />
+                    </group>
+
+                    <group>
+                        <field name="fecha" />
+                        <field name="ubicacion" />
                     </group>
 
                 </group>
@@ -39,10 +44,12 @@
     <field name="model">liga.partido</field>
     <field name="arch" type="xml">
         <tree>
-            <field name="equipo_casa"/>
-            <field name="goles_casa"/>
-            <field name="equipo_fuera"/>
-            <field name="goles_fuera"/>
+            <field name="equipo_local"/>
+            <field name="goles_local"/>
+            <field name="equipo_visitante"/>
+            <field name="goles_visitante"/>
+            <field name="fecha"/>
+            <field name="ubicacion"/>
         </tree>
         <header>
             <button name="sumar_gols_casa" type="object" string="Sumar 2 Gols Casa" class="btn-primary"/>
@@ -62,10 +69,12 @@
             <kanban>
                 <!-- Indicamos que atributos usaremos al hacer la vista Kanban -->
 
-                <field name="equipo_casa" />
-                <field name="goles_casa" />
-                <field name="equipo_fuera" />
-                <field name="goles_fuera" />
+                <field name="equipo_local" />
+                <field name="goles_local" />
+                <field name="equipo_visitante" />
+                <field name="goles_visitante" />
+                <field name="fecha" />
+                <field name="ubicacion" />
 
                 <!-- Plantilla QWeb para indicar como es la tarjeta Kanban-->
 
@@ -80,13 +89,19 @@
                                         </b>
                                     </div>
                                     <div >
-                                        <field name="equipo_casa" /> :
-                                        <field name="goles_casa" />
+                                        <field name="equipo_local" /> :
+                                        <field name="goles_local" />
                                     </div>
                                 </div>
                                 <div>
-                                    <field name="equipo_fuera" /> :
-                                    <field name="goles_fuera" />
+                                    <field name="equipo_visitante" /> :
+                                    <field name="goles_visitante" />
+                                </div>
+                                <div>
+                                    <field name="fecha" />
+                                </div>
+                                <div>
+                                    <field name="ubicacion" />
                                 </div>
                             </div>
                         
@@ -95,6 +110,19 @@
                 </templates>
 
             </kanban>
+        </field>
+    </record>
+
+        <!-- Vista Graph  que muestra información usando como base los puntos-->
+    <record model="ir.ui.view" id="liga_partido_view_graph">
+        <field name="name">goles_en_casa</field>
+        <field name="model">liga.partido</field>
+        <field name="type">graph</field>
+        <field name="arch" type="xml">
+            <graph string="Goles en Casa por Partido">
+                <field name="equipo_local" group="True" type="row"/>
+                <field name="goles_local" type="measure"/>
+            </graph>
         </field>
     </record>
 
