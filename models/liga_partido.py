@@ -6,7 +6,7 @@ from odoo.exceptions import ValidationError
 class LigaPartido(models.Model):
     #Nombre y descripcion del modelo
     _name = 'liga.partido'
-    _description = 'Un partido de la liga'
+    _description = 'Partido de la Liga'
 
 
     #Atributos del modelo
@@ -29,38 +29,43 @@ class LigaPartido(models.Model):
    
 
     #Nombre del equipo que juega en casa casa
-    equipo_casa = fields.Many2one(
+    equipo_local = fields.Many2one(
         'liga.equipo',
-        string='Equipo local',
+        string='Equip Local',
+        required=True
     )
     #Goles equipo de casa
-    goles_casa= fields.Integer()
+    goles_local= fields.Integer(string='Gols Local')
 
     #Nombre del equipo que juega fuera
-    equipo_fuera = fields.Many2one(
+    equipo_visitante = fields.Many2one(
         'liga.equipo',
-        string='Equipo visitante',
+        string='Equip Visitant',
+        required=True
     )
     #Goles equipo de casa
-    goles_fuera= fields.Integer()
+    goles_visitante= fields.Integer(string='Gols Visitant')
+
+    fecha = fields.Datetime(string='Data del Partit', required=True)
+    ubicacion = fields.Char(string='Ubicació')
     
     #Constraints de atributos
-    @api.constrains('equipo_casa')
+    @api.constrains('equipo_local')
     def _check_mismo_equipo_casa(self):
         for record in self:
-            if not record.equipo_casa:
+            if not record.equipo_local:
                 raise models.ValidationError('Debe seleccionarse un equipo local.')
-            if record.equipo_casa == record.equipo_fuera:
+            if record.equipo_local == record.equipo_visitante:
                 raise models.ValidationError('Los equipos del partido deben ser diferentes.')
 
 
      #Constraints de atributos
-    @api.constrains('equipo_fuera')
+    @api.constrains('equipo_visitante')
     def _check_mismo_equipo_fuera(self):
         for record in self:
-            if not record.equipo_fuera:
+            if not record.equipo_visitante:
                 raise models.ValidationError('Debe seleccionarse un equipo visitante.')
-            if record.equipo_fuera and record.equipo_casa == record.equipo_fuera:
+            if record.equipo_visitante and record.equipo_local == record.equipo_visitante:
                 raise models.ValidationError('Los equipos del partido deben ser diferentes.')
 
 
@@ -80,38 +85,38 @@ class LigaPartido(models.Model):
             recordEquipo.puntos = 0
 
             for recordPartido in self.env['liga.partido'].search([]):
-                if recordPartido.equipo_casa.nombre == recordEquipo.nombre:
-                    if recordPartido.goles_casa > recordPartido.goles_fuera:
+                if recordPartido.equipo_local.nombre == recordEquipo.nombre:
+                    if recordPartido.goles_local > recordPartido.goles_visitante:
                         recordEquipo.victorias += 1
-                        if (recordPartido.goles_casa - recordPartido.goles_fuera) >= 4:
+                        if (recordPartido.goles_local - recordPartido.goles_visitante) >= 4:
                             recordEquipo.puntos += 4
                         else:
                             recordEquipo.puntos += 3
-                    elif recordPartido.goles_casa < recordPartido.goles_fuera:
+                    elif recordPartido.goles_local < recordPartido.goles_visitante:
                         recordEquipo.derrotas += 1
-                        if (recordPartido.goles_fuera - recordPartido.goles_casa) >= 4:
+                        if (recordPartido.goles_visitante - recordPartido.goles_local) >= 4:
                             recordEquipo.puntos -= 1
                     else:
                         recordEquipo.empates += 1
-                    recordEquipo.goles_a_favor += recordPartido.goles_casa
-                    recordEquipo.goles_en_contra += recordPartido.goles_fuera
+                    recordEquipo.goles_a_favor += recordPartido.goles_local
+                    recordEquipo.goles_en_contra += recordPartido.goles_visitante
 
-                if recordPartido.equipo_fuera.nombre == recordEquipo.nombre:
-                    if recordPartido.goles_casa < recordPartido.goles_fuera:
+                if recordPartido.equipo_visitante.nombre == recordEquipo.nombre:
+                    if recordPartido.goles_local < recordPartido.goles_visitante:
                         recordEquipo.victorias += 1
-                    elif recordPartido.goles_casa > recordPartido.goles_fuera:
+                    elif recordPartido.goles_local > recordPartido.goles_visitante:
                         recordEquipo.derrotas += 1
                     else:
                         recordEquipo.empates += 1
-                    recordEquipo.goles_a_favor += recordPartido.goles_fuera
-                    recordEquipo.goles_en_contra += recordPartido.goles_casa
+                    recordEquipo.goles_a_favor += recordPartido.goles_visitante
+                    recordEquipo.goles_en_contra += recordPartido.goles_local
 
 
 
     #API onchange para cuando se modifica un partido
     #Aunque onchange envia un registro, hacemos codigo para recalcular 
     #http://www.geninit.cn/developer/reference/orm.html  
-    @api.onchange('equipo_casa', 'goles_casa', 'equipo_fuera', 'goles_fuera')
+    @api.onchange('equipo_local', 'goles_local', 'equipo_visitante', 'goles_visitante')
     def actualizar(self):
         self.actualizoRegistrosEquipo()
     
