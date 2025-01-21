@@ -24,6 +24,7 @@
         #Mas información en https://www.odoo.com/documentation/17.0/es/developer/howtos/rdtraining/05_securityintro.html
         #Y en www.odoo.yenthevg.com/creating-security-groups-odoo/
         #'security/groups.xml',
+        'controllers/mostar_equipo.xml',
         'security/ir.model.access.csv',
 
         #Aqui distintas vistas de equipo (vistas diferentes, mismo modelo)

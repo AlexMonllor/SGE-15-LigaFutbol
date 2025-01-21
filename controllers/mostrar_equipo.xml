@@ -1,0 +1,15 @@
+<odoo>
+    <templates>
+        <t t-name="liga_futbol.kanban_box">
+            <t t-foreach="equipos" t-as="record">
+                <div class="o_kanban_image_inner_pic">
+                    <div><t t-esc="record.nombre"/></div>
+                    <div><t t-esc="record.descripcion"/></div>
+                    <div><t t-esc="record.fecha_fundacion"/></div>
+                    <img t-att-src="'/web/image/liga.equipo/%d/escudo' % record.id" 
+                         alt="Escudo del equipo" class="o_kanban_image"/>
+                </div>
+            </t>
+        </t>
+    </templates>
+</odoo>
